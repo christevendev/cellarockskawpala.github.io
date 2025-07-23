@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ikaw Pala - Lyric Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff7aa2, #b19cd9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(255, 122, 162, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+            opacity: 0.9;
+        }
+        
+        .player-container {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .album-art {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: rotate 20s linear infinite;
+            animation-play-state: paused;
+        }
+        
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .player-container.playing .album-art {
+            animation-play-state: running;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-top: 10px;
+        }
+        
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff7aa2, #b19cd9);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(177, 156, 217, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 7px 20px rgba(177, 156, 217, 0.6);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .play-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            margin-top: 10px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #ff7aa2, #b19cd9);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-top: 5px;
+        }
+        
+        .lyrics-container {
+            background: rgba(10, 15, 30, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .lyrics {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+        
+        .lyric-line {
+            font-size: 1.8rem;
+            text-align: center;
+            opacity: 0.4;
+            transition: all 0.5s ease;
+            line-height: 1.4;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+        }
+        
+        .lyric-line.active {
+            opacity: 1;
+            font-size: 2.1rem;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 122, 162, 0.7);
+            transform: scale(1.05);
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            color: #b19cd9;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            opacity: 0.7;
+            align-self: flex-start;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+        
+        .visualizer {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 3px;
+            margin-top: 15px;
+        }
+        
+        .bar {
+            width: 8px;
+            background: linear-gradient(to top, #ff7aa2, #b19cd9);
+            border-radius: 4px 4px 0 0;
+            height: 20px;
+            transition: height 0.2s ease;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .lyric-line {
+                font-size: 1.4rem;
+            }
+            
+            .lyric-line.active {
+                font-size: 1.6rem;
+            }
+            
+            .album-art {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .play-btn {
+                width: 60px;
+                height: 60px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .lyric-line {
+                font-size: 1.2rem;
+            }
+            
+            .lyric-line.active {
+                font-size: 1.4rem;
+            }
+            
+            .album-art {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>'Kaw Pala</h1>
+            <p>By: CellaRocks</p>
+        </header>
+        
+        <div class="player-container" id="player-container">
+            <div class="album-art">
+                <img src="cellarocks.jpg" alt="Album Art">
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                <button class="control-btn play-btn" id="play-btn"><i class="fas fa-play"></i></button>
+                <button class="control-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
+            </div>
+            
+            <div class="progress-container" id="progress-container">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <div class="time-info">
+                <span id="current-time">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+            
+            <div class="visualizer" id="visualizer"></div>
+        </div>
+        
+        <div class="lyrics-container">
+            <div class="lyrics" id="lyrics">
+                <!-- Lyrics will be inserted here by the js -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Created because of the abundunt free time | Lyric Video Player</p>
+    </footer>
+    
+    <audio id="audio-player" src="Kaw Pala - CellaaRocks.mp3"></audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const audioPlayer = document.getElementById('audio-player');
+            const playBtn = document.getElementById('play-btn');
+            const progressContainer = document.getElementById('progress-container');
+            const progress = document.getElementById('progress');
+            const currentTimeEl = document.getElementById('current-time');
+            const durationEl = document.getElementById('duration');
+            const lyricsContainer = document.getElementById('lyrics');
+            const playerContainer = document.getElementById('player-container');
+            const visualizer = document.getElementById('visualizer');
+            
+            // Lyrics data with timing information (in seconds)
+            const lyricsData = [
+  { text: "Verse 1", time: 0, type: "section" },
+  { text: "Mula sa una, hindi ko marinig", time: 23 },
+  { text: "Hanggang sa dulo’y ngalan mo pa din", time: 31 },
+  { text: "Bawat tawanan, boses mo’y nadidinig", time: 37 },
+  { text: "Sa bawat sulok ay, sa’yo ang tingin", time: 45 },
+
+  { text: "Verse 2", time: 52, type: "section" },
+  { text: "Ikaw ang hinihintay ng puso ko", time: 67 },
+  { text: "Kahit ‘di ko alam, ikaw na ‘to", time: 74 },
+  { text: "Mula sa wala, naging mahalaga", time: 82 },
+  { text: "Ngayon, nasan ka?", time: 90 },
+
+  { text: "Pre-Chorus", time: 96, type: "section" },
+  { text: "‘Di ko masabi", time: 98 },
+  { text: "Baka mawala pa din", time: 104 },
+
+  { text: "Chorus", time: 109, type: "section" },
+  { text: "Ikaw pala, hindi ko kayang aminin", time: 111 },
+  { text: "Walang ibang nananabik sa’kin", time: 119 },
+  { text: "Puwede bang hawakan mo nang mahigpit", time: 126 },
+  { text: "Ang aking kamay na nanlalamig?", time: 134 },
+  { text: "Ikaw pala, hindi ko kayang aminin", time: 140 },
+  { text: "Walang ibang nananabik sa’kin", time: 148 },
+  { text: "Puwede bang damhin mo ang lamig?", time: 156 },
+  { text: "Baka sakaling malaman mo rin", time: 162 },
+
+  { text: "Verse 3", time: 167, type: "section" },
+  { text: "May mga gabing ikaw ang iniisip", time: 172 },
+  { text: "Pangalan mo’y inuulit-ulit", time: 179 },
+  { text: "May gustong sabihin ang mga mata mo", time: 186 },
+  { text: "Parehong may tinatago", time: 193 },
+
+  { text: "Pre-Chorus", time: 195, type: "section" },
+  { text: "‘Di ko masabi", time: 202 },
+  { text: "Baka mawala pa din", time: 207 },
+
+  { text: "Chorus", time: 213, type: "section" },
+  { text: "Ikaw pala, hindi ko kayang aminin", time: 215 },
+  { text: "Walang ibang nananabik sa’kin", time: 222 },
+  { text: "Puwede bang hawakan mo nang mahigpit", time: 230 },
+  { text: "Ang aking kamay na nanlalamig?", time: 236 },
+  { text: "Ikaw pala, hindi ko kayang aminin", time: 244 },
+  { text: "Walang ibang nananabik sa’kin", time: 252 },
+  { text: "Puwede bang damhin mo ang lamig?", time: 258 },
+  { text: "Baka sakaling malaman mo rin", time: 265 },
+
+  { text: "Instrumental", time: 288, type: "section" },
+
+  { text: "Bridge", time: 280, type: "section" },
+  { text: "Kung sakaling sabihin ko ang totoo", time: 290 },
+  { text: "May pag-asa bang ‘di maglaho?", time: 297 },
+  { text: "Kung sakaling sabihin ko ang totoo", time: 303 },
+  { text: "Sana’y huwag mo akong lisanin", time: 311 },
+
+  { text: "Solo", time: 319, type: "section" },
+
+  { text: "Last Chorus", time: 348, type: "section" },
+  { text: "Baka naman, puwede na ‘kong umamin", time: 349 },
+  { text: "Wala na tayong dapat pang isipin", time: 353 },
+  { text: "Kung pareho lang ding nag-lisa", time: 361 },
+  { text: "Baka tayo pa, maging sa huli", time: 371 }
+];
+
+            // Create visualizer bars
+            for (let i = 0; i < 50; i++) {
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                visualizer.appendChild(bar);
+            }
+            
+            // Render lyrics
+            lyricsData.forEach(item => {
+                if (item.type === "section") {
+                    const sectionTitle = document.createElement('div');
+                    sectionTitle.classList.add('section-title');
+                    sectionTitle.textContent = item.text;
+                    lyricsContainer.appendChild(sectionTitle);
+                } else {
+                    const lyricLine = document.createElement('div');
+                    lyricLine.classList.add('lyric-line');
+                    lyricLine.textContent = item.text;
+                    lyricLine.dataset.time = item.time;
+                    lyricsContainer.appendChild(lyricLine);
+                }
+            });
+            
+            // Play/Pause functionality
+            playBtn.addEventListener('click', () => {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    playerContainer.classList.add('playing');
+                } else {
+                    audioPlayer.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    playerContainer.classList.remove('playing');
+                }
+            });
+            
+            // Update progress bar
+            audioPlayer.addEventListener('timeupdate', () => {
+                const { currentTime, duration } = audioPlayer;
+                const progressPercent = (currentTime / duration) * 100;
+                progress.style.width = `${progressPercent}%`;
+                
+                // Update time display
+                currentTimeEl.textContent = formatTime(currentTime);
+                
+                // Highlight current lyric
+                highlightCurrentLyric(currentTime);
+                
+                // Update visualizer
+                updateVisualizer();
+            });
+            
+            // Set progress
+            progressContainer.addEventListener('click', (e) => {
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audioPlayer.duration;
+                
+                audioPlayer.currentTime = (clickX / width) * duration;
+            });
+            
+            // Format time as MM:SS
+            function formatTime(time) {
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60);
+                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+            
+            // Update duration display
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audioPlayer.duration);
+            });
+            
+            // Highlight current lyric
+            function highlightCurrentLyric(currentTime) {
+                const lyricLines = document.querySelectorAll('.lyric-line');
+                let currentIndex = -1;
+                
+                // Find the current lyric
+                for (let i = 0; i < lyricLines.length; i++) {
+                    const time = parseFloat(lyricLines[i].dataset.time);
+                    if (currentTime >= time) {
+                        currentIndex = i;
+                    } else {
+                        break;
+                    }
+                }
+                
+                // Remove active class from all
+                lyricLines.forEach(line => line.classList.remove('active'));
+                
+                // Add active class to current lyric
+                if (currentIndex >= 0) {
+                    lyricLines[currentIndex].classList.add('active');
+                    
+                    // Scroll to active lyric
+                    const activeLine = lyricLines[currentIndex];
+                    const containerHeight = lyricsContainer.offsetHeight;
+                    const lineOffset = activeLine.offsetTop;
+                    const lineHeight = activeLine.offsetHeight;
+                    
+                    lyricsContainer.style.transform = `translateY(-${lineOffset - containerHeight/2 + lineHeight}px)`;
+                }
+            }
+            
+            // Visualizer animation
+            function updateVisualizer() {
+                const bars = document.querySelectorAll('.bar');
+                bars.forEach(bar => {
+                    const height = Math.random() * 80 + 20;
+                    bar.style.height = `${height}%`;
+                    
+                    // Add color variation
+                    const colorVal = Math.floor(Math.random() * 30) + 70;
+                    bar.style.background = `linear-gradient(to top, hsl(340, 100%, ${colorVal}%), #b19cd9`;
+                });
+            }
+            
+            // Initialize visualizer
+            setInterval(updateVisualizer, 200);
+        });
+    </script>
+</body>
+</html>
